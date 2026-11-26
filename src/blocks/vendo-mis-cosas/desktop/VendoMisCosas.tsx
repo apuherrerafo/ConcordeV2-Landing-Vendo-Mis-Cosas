@@ -382,7 +382,7 @@ const VM_CSS = `
 .vm-whatsapp__cta:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
 /* La escena se funde con el degradado: anclada a la derecha, a todo el alto, con máscara hacia la izquierda. */
 /* Ícono de vidrio en el hueco entre el CTA y la escena: sombra con desplazamiento y flotación lenta. */
-.vm-whatsapp__icon { position: absolute; z-index: 2; top: 50%; left: 52.5%; width: 112px; height: auto; transform: translateY(-50%) rotate(-8deg);
+.vm-whatsapp__icon { position: absolute; z-index: 2; top: 50%; left: 57%; width: 112px; height: auto; transform: translateY(-50%) rotate(-8deg);
   filter: drop-shadow(0 14px 18px rgba(20,0,60,0.45)); pointer-events: none; }
 @media (prefers-reduced-motion: no-preference) {
   .vm-whatsapp__icon { animation: vm-float 5.5s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate; }
@@ -460,18 +460,20 @@ const VM_CSS = `
   .vm-sell::before { background: linear-gradient(0deg, rgba(46,15,112,0.96) 0%, rgba(59,23,130,0.8) 45%, transparent 75%); }
   .vm-sell figcaption { max-width: none; }
   .vm-sell h2 { font-size: 24px; }
-  .vm-use__opts { grid-template-columns: minmax(0, 1fr); grid-auto-rows: 150px; gap: 10px; }
+  .vm-use__opts { grid-template-columns: minmax(0, 1fr); grid-auto-rows: 168px; gap: 10px; }
   .vm-use__opts li > div { padding: 16px; }
-  .vm-use__opts span { max-width: 54%; }
+  .vm-use__opts span, .vm-use__opts li:nth-child(2) span { max-width: 50%; font-size: 13px; line-height: 18px; }
+  .vm-use__opts li:nth-child(2) span { max-width: 58%; }
+  .vm-use__opts li:nth-child(2) img { transform: translateX(14%); }
   .vm-use__opts strong { font-size: 16px; line-height: 21px; }
-  .vm-whatsapp { width: min(100%, 388px); height: auto; aspect-ratio: 388 / 120; }
+  .vm-whatsapp { width: 100%; height: 200px; }
   .vm-whatsapp__glow--left { left: -18%; top: -67%; width: 41%; height: auto; aspect-ratio: 1; filter: blur(35px); }
   .vm-whatsapp__glow--right { display: none; }
   .vm-whatsapp__glow--orange { left: -22%; top: -37%; width: 41%; height: auto; aspect-ratio: 1; filter: blur(60px); }
-  .vm-whatsapp h2 { top: 4%; left: 3%; width: 46%; font-size: clamp(14px, 4.6vw, 18px); line-height: 1.15; }
-  .vm-whatsapp__cta { top: 66%; right: 3%; left: auto; width: 75%; height: 34%; padding: 0 8px; font-size: clamp(11px, 3.2vw, 14px); }
-  .vm-whatsapp__icon { left: auto; right: 54%; top: 72%; width: 44px; }
-  .vm-whatsapp > img:not(.vm-whatsapp__icon) { top: 0; left: auto; right: 0; width: 62%; height: 100%; }
+  .vm-whatsapp h2 { top: 20px; left: 20px; width: 46%; font-size: 18px; line-height: 21px; }
+  .vm-whatsapp__cta { top: auto; bottom: 16px; left: 16px; right: 16px; width: auto; height: 44px; padding: 0 12px; font-size: 14px; }
+  .vm-whatsapp__icon { left: 41%; top: 54%; width: 48px; }
+  .vm-whatsapp > img:not(.vm-whatsapp__icon) { top: 0; left: auto; right: 0; width: 66%; height: 100%; object-position: 88% 0; }
   .vm-faq { padding: 24px 12px; }
   .vm-faq summary { padding: 0 12px 0 16px; }
   .vm-faq details p { padding: 0 16px 16px; }
