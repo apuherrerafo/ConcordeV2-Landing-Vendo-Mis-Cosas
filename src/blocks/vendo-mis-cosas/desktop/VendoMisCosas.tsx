@@ -43,8 +43,8 @@ const PERKS: { icon: Sec; title: string; text: string }[] = [
 // Dos accesos (Julio 26/11): uno lleva a publicar artículos; el otro rescata a quien llegó buscando vender su carro
 // (recorrido propio: Valorizar → Publicar).
 const USES = [
-  { img: `${IMG}/publica.jpg`, href: PUBLICAR, title: "¿Algo que ya no usas?", text: "Publícalo en VMC y recibe propuestas.", cta: "Publicar" },
-  { img: `${IMG}/vende-carro.jpg`, href: VALUAR, title: "¿O lo que buscabas era vender tu carro?", text: "Valorízalo y publícalo en VMC.", cta: "Valorizar" },
+  { img: `${IMG}/publica.jpg`, href: PUBLICAR, title: "¿Algo que ya no usas?", text: "Publícalo en VMC y recibe propuestas.", cta: "Publicar", variant: "primary" as const },
+  { img: `${IMG}/vende-carro.jpg`, href: VALUAR, title: "¿O lo que buscabas era vender tu carro?", text: "Valorízalo y publícalo en VMC.", cta: "Valorizar", variant: "secondary" as const },
 ];
 
 // Lo que se ve en el banner gráfico (departamentos del prototipo v4, taxonomía demostrativa).
@@ -171,10 +171,12 @@ function VendoBody({ id }: { id: "d" | "m" }): JSX.Element {
           <ul className="vm-use__opts">
             {USES.map((u) => (
               <li key={u.title}>
-                <a href={u.href}>
+                <div>
                   <img src={u.img} alt="" loading="lazy" />
-                  <span><strong>{u.title}</strong>{u.text}<em>{u.cta}</em></span>
-                </a>
+                  <span><strong>{u.title}</strong>{u.text}</span>
+                  {/* CTA con el Button de Concorde (primary = camino principal, secondary = recorrido del carro). */}
+                  <Button variant={u.variant} onClick={() => router.push(u.href)}>{u.cta}</Button>
+                </div>
               </li>
             ))}
           </ul>
@@ -351,14 +353,11 @@ const VM_CSS = `
 .vm-use__opts { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-auto-rows: 168px; gap: 14px; margin: 0; padding: 0; list-style: none; text-align: left; }
 .vm-use__opts li { position: relative; isolation: isolate; overflow: hidden; border: 1px solid #DDCFF7; border-radius: 18px; background: linear-gradient(120deg, #FFFFFF 0%, var(--lav) 60%, #EFE7FF 100%);
   box-shadow: 0 12px 20px -18px rgba(59,23,130,0.45); transition: border-color 200ms var(--ease), box-shadow 200ms var(--ease), transform 200ms var(--ease); }
-.vm-use__opts li:hover { border-color: #CDBDF5; box-shadow: 0 18px 28px -20px rgba(59,23,130,0.55); transform: translateY(-2px); }
-.vm-use__opts a { display: flex; align-items: center; height: 100%; padding: 22px 24px; color: var(--muted); font-size: 14px; line-height: 20px; text-decoration: none; }
-.vm-use__opts a:focus-visible { outline: 2px solid var(--v500); outline-offset: -3px; border-radius: 18px; }
+.vm-use__opts li > div { display: grid; align-content: center; justify-items: start; gap: 12px; height: 100%; padding: 20px 24px; color: var(--muted); font-size: 14px; line-height: 20px; }
 .vm-use__opts span { display: grid; gap: 4px; max-width: 48%; }
 .vm-use__opts strong { font-size: 18px; line-height: 23px; font-weight: 800; letter-spacing: -0.02em; color: var(--v700); }
-.vm-use__opts em { justify-self: start; margin-top: 8px; font-size: 14px; line-height: 20px; font-weight: 800; color: var(--orange); }
-.vm-use__opts em::after { content: " →"; display: inline-block; transition: transform 200ms var(--ease); }
-.vm-use__opts li:hover em::after { transform: translateX(3px); }
+/* Botones de Concorde a escala de tarjeta (misma pieza, alto y aire compactos). */
+.vm-use__opts .pvbtn, .vm-use__opts .psec { height: 40px; padding: 0 28px; font-size: 14px; }
 .vm-use__opts img { position: absolute; z-index: -1; top: 0; right: 0; width: 56%; height: 100%; object-fit: cover; display: block;
   -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 34%); mask-image: linear-gradient(90deg, transparent 0%, #000 34%); }
 .vm-use__opts li:first-child img { object-position: 50% 40%; }
@@ -453,7 +452,7 @@ const VM_CSS = `
   .vm-sell figcaption { max-width: none; }
   .vm-sell h2 { font-size: 24px; }
   .vm-use__opts { grid-template-columns: minmax(0, 1fr); grid-auto-rows: 150px; gap: 10px; }
-  .vm-use__opts a { padding: 16px; }
+  .vm-use__opts li > div { padding: 16px; }
   .vm-use__opts span { max-width: 54%; }
   .vm-use__opts strong { font-size: 16px; line-height: 21px; }
   .vm-whatsapp { width: min(100%, 388px); height: auto; aspect-ratio: 388 / 120; }
