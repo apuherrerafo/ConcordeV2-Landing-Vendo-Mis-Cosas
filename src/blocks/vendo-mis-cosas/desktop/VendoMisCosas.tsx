@@ -52,7 +52,7 @@ const EXPECT: { icon: Sec; title: string; text: string }[] = [
 // (recorrido propio: Valorizar → Publicar).
 const USES = [
   { img: `${IMG}/publica.jpg`, href: PUBLICAR, title: "¿Tienes algo que ya no usas?", text: "Publícalo en VMC y recibe propuestas." },
-  { img: `${IMG}/vende-auto.jpg`, href: VALUAR, title: "¿O lo que buscabas era vender tu carro?", text: "Haz clic aquí: valorízalo y publícalo en VMC." },
+  { img: `${IMG}/vende-carro.jpg`, href: VALUAR, title: "¿O lo que buscabas era vender tu carro?", text: "Haz clic aquí: valorízalo y publícalo en VMC." },
 ];
 
 // Lo que se ve en el banner gráfico (departamentos del prototipo v4, taxonomía demostrativa).
@@ -251,7 +251,7 @@ function VendoBody({ id }: { id: "d" | "m" }): JSX.Element {
 }
 
 const VM_CSS = `
-.vm { --ink: #191C1C; --muted: #6B6878; --v900: #1C0B4F; --v800: #2E0F70; --v700: #3B1782; --v500: #8460E5; --lav: #F5F0FF; --line: #ECE6FB; --peach: var(--vmc-color-orange-400, #FBC47D); --orange: var(--vmc-color-orange-600, #ED8936);
+.vm { --ink: #191C1C; --muted: #6B6878; --v900: #1C0B4F; --v800: #2E0F70; --v700: #3B1782; --v500: #8460E5; --lav: #F5F0FF; --line: #ECE6FB; --peach: var(--vmc-color-orange-600, #ED8936); --orange: var(--vmc-color-orange-600, #ED8936);
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
   width: 100%; padding: 16px 16px 64px; box-sizing: border-box; display: grid; gap: 16px; background: #fff; font-family: var(--vmc-font-display); color: var(--ink); }
 .vm *, .vm *::before, .vm *::after { box-sizing: border-box; }
@@ -375,15 +375,14 @@ const VM_CSS = `
 .vm-use__opts svg { color: var(--orange); transition: transform 200ms var(--ease); }
 .vm-use__opts a:hover svg { transform: translateX(3px); }
 .vm-use__opts li:nth-child(2) { border-color: transparent; background: linear-gradient(126deg, #32136F 0%, #4E22A9 58%, #7B4BE3 100%); }
-.vm-use__opts li:nth-child(2)::after { content: ""; position: absolute; top: -34px; right: -20px; bottom: -34px; width: 43%; opacity: 0.68;
+.vm-use__opts li:nth-child(2)::after { display: none; content: ""; position: absolute; top: -34px; right: -20px; bottom: -34px; width: 43%; opacity: 0.68;
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12)); }
 .vm-use__opts li:nth-child(2) a { color: #E8DDFF; }
 .vm-use__opts li:nth-child(2) a { grid-template-columns: minmax(0, 1fr) 20px; }
 .vm-use__opts li:nth-child(2) a:hover { background: rgba(255,255,255,0.07); }
-.vm-use__opts li:nth-child(2) img { position: absolute; z-index: -1; top: 0; right: 0; width: 43%; height: 100%; border-radius: 0; opacity: 0.78;
-  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 48%); mask-image: linear-gradient(90deg, transparent 0%, #000 48%); }
+.vm-use__opts li:nth-child(2) img { position: absolute; z-index: -1; inset: 0; width: 100%; height: 100%; border-radius: 0; object-fit: cover; object-position: 100% 30%; }
 .vm-use__opts li:nth-child(2) strong { color: #fff; }
-.vm-use__opts li:nth-child(2) span { max-width: 62%; }
+.vm-use__opts li:nth-child(2) span { max-width: 50%; }
 .vm-use__opts li:nth-child(2) svg { color: var(--peach); }
 
 /* Franja del canal: composición y medidas del banner de próximas ofertas de Valoriza. */
