@@ -198,6 +198,9 @@ function VendoBody({ id }: { id: "d" | "m" }): JSX.Element {
           ¡Únete a nuestro canal oficial de WhatsApp!
         </a>
         {/* Escena de Flow con Tino y Tina (hojas de Prisma) e ícono de vidrio esmerilado; receta en Prisma/recetas/vendo-mis-cosas-carro/. */}
+        {/* EXCEPCIÓN A LA REGLA DE LOGOS (26/11, pedido de Abraham): logo de WhatsApp recreado en vidrio esmerilado con IA.
+            Pendiente de aprobación de Julio/Edge antes de publicar; si no se aprueba, cambiar por un ícono propio (burbuja + campana). */}
+        <img className="vm-whatsapp__icon" src={`${IMG}/whatsapp-esmerilado.png`} alt="" aria-hidden width={416} height={440} loading="lazy" />
         <img src={`${IMG}/whatsapp-tino-tina.jpg`} alt="Tino y Tina revisando una alerta de nuevas ofertas en el celular" loading="lazy" />
       </section>
 
@@ -378,7 +381,14 @@ const VM_CSS = `
 .vm-whatsapp__cta:hover { opacity: 0.92; }
 .vm-whatsapp__cta:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
 /* La escena se funde con el degradado: anclada a la derecha, a todo el alto, con máscara hacia la izquierda. */
-.vm-whatsapp > img { position: absolute; z-index: 1; top: 0; right: 0; height: 100%; width: auto; aspect-ratio: 800 / 418; object-fit: cover;
+/* Ícono de vidrio en el hueco entre el CTA y la escena: sombra con desplazamiento y flotación lenta. */
+.vm-whatsapp__icon { position: absolute; z-index: 2; top: 50%; left: 52.5%; width: 112px; height: auto; transform: translateY(-50%) rotate(-8deg);
+  filter: drop-shadow(0 14px 18px rgba(20,0,60,0.45)); pointer-events: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .vm-whatsapp__icon { animation: vm-float 5.5s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate; }
+  @keyframes vm-float { to { transform: translateY(calc(-50% - 8px)) rotate(-4deg); } }
+}
+.vm-whatsapp > img:not(.vm-whatsapp__icon) { position: absolute; z-index: 1; top: 0; right: 0; height: 100%; width: auto; aspect-ratio: 800 / 418; object-fit: cover;
   -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 28%); mask-image: linear-gradient(90deg, transparent 0%, #000 28%); }
 
 /* Preguntas frecuentes: título centrado y tarjetas numeradas (como Subascars), <details> nativo. */
@@ -460,7 +470,8 @@ const VM_CSS = `
   .vm-whatsapp__glow--orange { left: -22%; top: -37%; width: 41%; height: auto; aspect-ratio: 1; filter: blur(60px); }
   .vm-whatsapp h2 { top: 4%; left: 3%; width: 46%; font-size: clamp(14px, 4.6vw, 18px); line-height: 1.15; }
   .vm-whatsapp__cta { top: 66%; right: 3%; left: auto; width: 75%; height: 34%; padding: 0 8px; font-size: clamp(11px, 3.2vw, 14px); }
-  .vm-whatsapp > img { top: 0; left: auto; right: 0; width: 62%; height: 100%; }
+  .vm-whatsapp__icon { left: auto; right: 54%; top: 72%; width: 44px; }
+  .vm-whatsapp > img:not(.vm-whatsapp__icon) { top: 0; left: auto; right: 0; width: 62%; height: 100%; }
   .vm-faq { padding: 24px 12px; }
   .vm-faq summary { padding: 0 12px 0 16px; }
   .vm-faq details p { padding: 0 16px 16px; }
