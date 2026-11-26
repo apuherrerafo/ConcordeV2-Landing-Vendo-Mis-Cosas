@@ -187,7 +187,6 @@ function VendoBody({ id }: { id: "d" | "m" }): JSX.Element {
         <i className="vm-whatsapp__glow vm-whatsapp__glow--left" aria-hidden />
         <i className="vm-whatsapp__glow vm-whatsapp__glow--right" aria-hidden />
         <i className="vm-whatsapp__glow vm-whatsapp__glow--orange" aria-hidden />
-        <i className="vm-whatsapp__glow vm-whatsapp__glow--green" aria-hidden />
         <h2>¡Entérate primero de las <span>próximas ofertas!</span></h2>
         <a
           className="vm-whatsapp__cta"
@@ -198,11 +197,8 @@ function VendoBody({ id }: { id: "d" | "m" }): JSX.Element {
         >
           ¡Únete a nuestro canal oficial de WhatsApp!
         </a>
-        <img
-          src="https://cdn.vmcsubastas.com/services/assets/landing-subascars/whatsapp-people.png"
-          alt="Personas revisando notificaciones de próximas ofertas por WhatsApp"
-          loading="lazy"
-        />
+        {/* Escena de Flow con Tino y Tina (hojas de Prisma) e ícono de vidrio esmerilado; receta en Prisma/recetas/vendo-mis-cosas-carro/. */}
+        <img src={`${IMG}/whatsapp-tino-tina.jpg`} alt="Tino y Tina revisando una alerta de nuevas ofertas en el celular" loading="lazy" />
       </section>
 
       {/* ── Preguntas frecuentes ── */}
@@ -367,22 +363,23 @@ const VM_CSS = `
 .vm-use__opts li img { width: 100%; object-position: 100% 30%; -webkit-mask-image: none; mask-image: none; }
 
 /* Franja del canal: composición y medidas del banner de próximas ofertas de Valoriza. */
-.vm-whatsapp { position: relative; isolation: isolate; justify-self: stretch; width: 100%; height: 120px; overflow: hidden; border-radius: 16px;
+.vm-whatsapp { position: relative; isolation: isolate; justify-self: stretch; width: 100%; height: 160px; overflow: hidden; border-radius: 16px;
   background: linear-gradient(141deg, #340091 33%, #8460E5 92%, #ED8936 100%); }
 .vm-whatsapp__glow { position: absolute; z-index: 0; display: block; border-radius: 999px; pointer-events: none; }
 .vm-whatsapp__glow--left { left: -140px; top: -160px; width: 320px; height: 320px; background: rgba(95,62,216,0.55); filter: blur(35px); }
 .vm-whatsapp__glow--right { right: -94px; top: -120px; width: 320px; height: 320px; background: rgba(132,96,229,0.5); filter: blur(40px); }
 .vm-whatsapp__glow--orange { left: -171px; top: -88px; width: 320px; height: 320px; background: rgba(237,137,54,0.3); filter: blur(60px); }
-.vm-whatsapp__glow--green { right: 42px; top: -3px; width: 150px; height: 150px; background: rgba(37,211,102,0.55); filter: blur(24px); }
-.vm-whatsapp h2 { position: absolute; z-index: 2; top: 14px; left: 20px; width: 429px; margin: 0; color: #fff; font-size: 20px; line-height: 24px; font-weight: 800; letter-spacing: -0.025em; }
+.vm-whatsapp h2 { position: absolute; z-index: 2; top: 40px; left: 32px; width: 429px; margin: 0; color: #fff; font-size: 20px; line-height: 24px; font-weight: 800; letter-spacing: -0.025em; }
 .vm-whatsapp h2 span { background: linear-gradient(166deg, #ED8936 0%, #ED8936 25%, #8460E5 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.vm-whatsapp__cta { position: absolute; z-index: 2; top: 60px; left: 20px; display: inline-flex; align-items: center; justify-content: center; width: 306px; height: 40px; padding: 0; border-radius: 999px;
+.vm-whatsapp__cta { position: absolute; z-index: 2; top: 82px; left: 32px; display: inline-flex; align-items: center; justify-content: center; width: 306px; height: 40px; padding: 0; border-radius: 999px;
   color: #fff; font-size: 13px; line-height: 18px; font-weight: 600; text-decoration: none; white-space: nowrap; border: 1.5px solid transparent;
   background: linear-gradient(180deg, rgba(255,255,255,0.30) 0%, rgba(255,255,255,0.08) 45%, rgba(43,13,111,0.24) 100%) padding-box, linear-gradient(#4E22A9, #4E22A9) padding-box, linear-gradient(104deg, #F4AC59 0%, #FFFFFF 17%, #8460E5 100%) border-box;
   box-shadow: 0 8px 24px rgba(0,0,0,0.1), inset 0 1px 6px rgba(255,255,255,0.42); }
 .vm-whatsapp__cta:hover { opacity: 0.92; }
 .vm-whatsapp__cta:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
-.vm-whatsapp > img { position: absolute; z-index: 1; top: -74px; right: 23px; width: 189px; height: 282px; object-fit: cover; }
+/* La escena se funde con el degradado: anclada a la derecha, a todo el alto, con máscara hacia la izquierda. */
+.vm-whatsapp > img { position: absolute; z-index: 1; top: 0; right: 0; height: 100%; width: auto; aspect-ratio: 800 / 418; object-fit: cover;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 28%); mask-image: linear-gradient(90deg, transparent 0%, #000 28%); }
 
 /* Preguntas frecuentes: título centrado y tarjetas numeradas (como Subascars), <details> nativo. */
 .vm-faq { display: grid; gap: 20px; padding: 32px 24px; }
@@ -461,10 +458,9 @@ const VM_CSS = `
   .vm-whatsapp__glow--left { left: -18%; top: -67%; width: 41%; height: auto; aspect-ratio: 1; filter: blur(35px); }
   .vm-whatsapp__glow--right { display: none; }
   .vm-whatsapp__glow--orange { left: -22%; top: -37%; width: 41%; height: auto; aspect-ratio: 1; filter: blur(60px); }
-  .vm-whatsapp__glow--green { right: auto; left: 74%; top: -2%; width: 19%; height: auto; aspect-ratio: 1; filter: blur(24px); }
   .vm-whatsapp h2 { top: 4%; left: 3%; width: 46%; font-size: clamp(14px, 4.6vw, 18px); line-height: 1.15; }
   .vm-whatsapp__cta { top: 66%; right: 3%; left: auto; width: 75%; height: 34%; padding: 0 8px; font-size: clamp(11px, 3.2vw, 14px); }
-  .vm-whatsapp > img { top: -67%; right: auto; left: 53%; width: 45%; height: 218%; }
+  .vm-whatsapp > img { top: 0; left: auto; right: 0; width: 62%; height: 100%; }
   .vm-faq { padding: 24px 12px; }
   .vm-faq summary { padding: 0 12px 0 16px; }
   .vm-faq details p { padding: 0 16px 16px; }
