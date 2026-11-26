@@ -163,7 +163,6 @@ function VendoBody({ id }: { id: "d" | "m" }): JSX.Element {
           <figure className="vm-sell">
             <img className="vm-sell__photo" src={`${IMG}/surtido.jpg`} alt="Sala llena de artículos: laptops, televisor, refrigeradora, lavadora y teléfonos" loading="lazy" />
             <figcaption>
-              <p className="vm-sell__kicker">Así de fácil</p>
               <h2>De la tele a la lavadora, <span>todo puede tener otro dueño</span></h2>
               <ul aria-label="Qué puedes publicar">{SURTIDO.map((c) => <li key={c}>{c}</li>)}</ul>
             </figcaption>
@@ -299,7 +298,7 @@ const VM_CSS = `
 .vm-center .vm-pill:not(:first-child) { margin-top: 48px; }
 .vm-title { margin: 0; max-width: 22ch; font-size: 36px; line-height: 1.15; font-weight: 800; letter-spacing: -0.035em; color: var(--v700); }
 .vm-title span { color: var(--v500); }
-.vm-categories-title { max-width: none; text-align: center; white-space: nowrap; }
+.vm-categories-title { max-width: none; margin-bottom: 16px; text-align: center; white-space: nowrap; }
 .vm-center .vm-title { max-width: 26ch; background: linear-gradient(100deg, #6E4BD7 0%, #735BE3 50%, #3AB7D1 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .vm-center .vm-title span { color: inherit; }
 .vm-lead { margin: 0; max-width: 68ch; font-size: 15px; line-height: 23px; color: var(--v700); }
@@ -336,33 +335,35 @@ const VM_CSS = `
 
 
 /* Trío de decisión: bloque principal + dos recorridos, con la composición de señales de Valoriza. */
-.vm-use { display: grid; gap: 14px; width: 100%; }
+.vm-use { display: grid; gap: 12px; width: 100%; }
 /* Banner gráfico: la foto de campaña ocupa todo el bloque y el violeta de la marca entra desde la izquierda para el texto. */
-.vm-sell { position: relative; overflow: hidden; isolation: isolate; display: grid; align-items: center; min-height: 300px; margin: 0; padding: 32px 36px; border-radius: 20px; color: #fff; background: var(--v800); text-align: left; }
+.vm-sell { position: relative; overflow: hidden; isolation: isolate; display: grid; align-items: center; min-height: 288px; margin: 0; padding: 40px 44px; border-radius: 20px; color: #fff; background: var(--v800); text-align: left; }
 .vm-sell__photo { position: absolute; z-index: -2; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 60% 45%; display: block; }
 .vm-sell::before { content: ""; position: absolute; z-index: -1; inset: 0; pointer-events: none;
   background: radial-gradient(70% 110% at -5% 115%, rgba(237,137,54,0.55) 0%, transparent 55%), linear-gradient(90deg, rgba(46,15,112,0.96) 0%, rgba(59,23,130,0.86) 34%, rgba(59,23,130,0.25) 62%, transparent 80%); }
-.vm-sell figcaption { display: grid; justify-items: start; gap: 12px; max-width: 46%; }
-.vm-sell__kicker { margin: 0; font-size: 12px; line-height: 16px; font-weight: 700; color: var(--peach); }
-.vm-sell h2 { margin: 0; font-size: 30px; line-height: 1.08; font-weight: 800; letter-spacing: -0.03em; }
+.vm-sell figcaption { display: grid; justify-items: start; gap: 18px; max-width: 58%; }
+.vm-sell h2 { margin: 0; font-size: 32px; line-height: 1.08; font-weight: 800; letter-spacing: -0.03em; }
 .vm-sell h2 span { display: block; color: var(--peach); }
-.vm-sell ul { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 0; padding: 0; list-style: none; }
+.vm-sell ul { display: flex; flex-wrap: wrap; gap: 8px; max-width: 520px; margin: 0; padding: 0; list-style: none; }
 .vm-sell li { padding: 6px 12px; border-radius: 999px; font-size: 12px; line-height: 16px; font-weight: 700; color: #fff;
   background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.35); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
 /* Dos accesos con la misma anatomía clara: texto a la izquierda, foto de campaña a la derecha fundida con el lavanda. */
-.vm-use__opts { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-auto-rows: 168px; gap: 14px; margin: 0; padding: 0; list-style: none; text-align: left; }
+.vm-use__opts { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); grid-auto-rows: 176px; gap: 12px; margin: 0; padding: 0; list-style: none; text-align: left; }
 .vm-use__opts li { position: relative; isolation: isolate; overflow: hidden; border: 1px solid #DDCFF7; border-radius: 18px; background: linear-gradient(120deg, #FFFFFF 0%, var(--lav) 60%, #EFE7FF 100%);
   box-shadow: 0 12px 20px -18px rgba(59,23,130,0.45); transition: border-color 200ms var(--ease), box-shadow 200ms var(--ease), transform 200ms var(--ease); }
 .vm-use__opts li > div { display: grid; align-content: center; justify-items: start; gap: 12px; height: 100%; padding: 20px 24px; color: var(--muted); font-size: 14px; line-height: 20px; }
-.vm-use__opts span { display: grid; gap: 4px; max-width: 48%; }
+.vm-use__opts span { display: grid; gap: 4px; max-width: 52%; }
+.vm-use__opts .pvbtn, .vm-use__opts .psec { margin-top: 10px; }
+.vm-use__opts li:nth-child(2) span { max-width: 54%; }
+.vm-center .vm-use__opts .pvbtn { width: auto; }
 .vm-use__opts strong { font-size: 18px; line-height: 23px; font-weight: 800; letter-spacing: -0.02em; color: var(--v700); }
 /* Botones de Concorde a escala de tarjeta (misma pieza, alto y aire compactos). */
 .vm-use__opts .pvbtn, .vm-use__opts .psec { height: 40px; padding: 0 28px; font-size: 14px; }
 .vm-use__opts img { position: absolute; z-index: -1; top: 0; right: 0; width: 56%; height: 100%; object-fit: cover; display: block;
   -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 34%); mask-image: linear-gradient(90deg, transparent 0%, #000 34%); }
-.vm-use__opts li:first-child img { object-position: 50% 40%; }
 /* La escena del carro ya viene en blanco a la izquierda: se ancla a la derecha sin máscara. */
-.vm-use__opts li:nth-child(2) img { width: 100%; object-position: 100% 30%; -webkit-mask-image: none; mask-image: none; }
+/* Las dos escenas de Flow ya vienen en blanco a la izquierda: foto completa anclada a la derecha, sin máscara. */
+.vm-use__opts li img { width: 100%; object-position: 100% 30%; -webkit-mask-image: none; mask-image: none; }
 
 /* Franja del canal: composición y medidas del banner de próximas ofertas de Valoriza. */
 .vm-whatsapp { position: relative; isolation: isolate; justify-self: stretch; width: 100%; height: 120px; overflow: hidden; border-radius: 16px;
