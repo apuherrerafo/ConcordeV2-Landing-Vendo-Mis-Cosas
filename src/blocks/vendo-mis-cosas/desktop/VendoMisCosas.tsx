@@ -40,19 +40,11 @@ const PERKS: { icon: Sec; title: string; text: string }[] = [
   { icon: "texto", title: "Publicación clara", text: "Fotos, detalles y categoría" },
 ];
 
-// Qué puedes vender: departamentos del prototipo v4 (taxonomía demostrativa, pendiente la oficial).
-const EXPECT: { icon: Sec; title: string; text: string }[] = [
-  { icon: "articulos", title: "Tecnología", text: "Laptops, celulares, consolas, audio, cámaras y TV." },
-  { icon: "mobiliario", title: "Hogar y muebles", text: "Sofás, mesas, sillas, camas e iluminación." },
-  { icon: "equipos", title: "Herramientas y oficina", text: "Herramientas, equipos industriales y de oficina." },
-  { icon: "publicar", title: "Y mucho más", text: "Electrodomésticos, instrumentos musicales y lo que ya no usas." },
-];
-
 // Dos accesos (Julio 26/11): uno lleva a publicar artículos; el otro rescata a quien llegó buscando vender su carro
 // (recorrido propio: Valorizar → Publicar).
 const USES = [
-  { img: `${IMG}/publica.jpg`, href: PUBLICAR, title: "¿Tienes algo que ya no usas?", text: "Publícalo en VMC y recibe propuestas." },
-  { img: `${IMG}/vende-carro.jpg`, href: VALUAR, title: "¿O lo que buscabas era vender tu carro?", text: "Valorízalo y publícalo en VMC." },
+  { img: `${IMG}/publica.jpg`, href: PUBLICAR, title: "¿Algo que ya no usas?", text: "Publícalo en VMC y recibe propuestas.", cta: "Publicar" },
+  { img: `${IMG}/vende-carro.jpg`, href: VALUAR, title: "¿O lo que buscabas era vender tu carro?", text: "Valorízalo y publícalo en VMC.", cta: "Valorizar" },
 ];
 
 // Lo que se ve en el banner gráfico (departamentos del prototipo v4, taxonomía demostrativa).
@@ -181,16 +173,12 @@ function VendoBody({ id }: { id: "d" | "m" }): JSX.Element {
               <li key={u.title}>
                 <a href={u.href}>
                   <img src={u.img} alt="" loading="lazy" />
-                  <span><strong>{u.title}</strong>{u.text}</span>
-                  <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden><path d="M7.5 5l5 5-5 5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  <span><strong>{u.title}</strong>{u.text}<em>{u.cta}</em></span>
                 </a>
               </li>
             ))}
           </ul>
         </section>
-        <ul className="vm-expect">
-          {EXPECT.map((e) => <li key={e.title}><Vidrio s={e.icon} size={40} /><h3>{e.title}</h3><p>{e.text}</p></li>)}
-        </ul>
       </section>
 
       {/* ── Canal de WhatsApp: misma franja de próximas ofertas de Valoriza. ── */}
@@ -344,11 +332,6 @@ const VM_CSS = `
 .vm-video__controls b:nth-of-type(2) { border-radius: 50%; }
 .vm-video__controls b:nth-of-type(3) { width: 3px; height: 14px; border: 0; border-radius: 99px; background: #fff; box-shadow: 6px 0 #fff; }
 
-/* Qué esperar: cuatro tarjetas con ícono. */
-.vm-expect { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; width: 100%; margin: 12px 0 0; padding: 0; list-style: none; text-align: left; }
-.vm-expect li { display: grid; align-content: start; gap: 10px; min-height: 194px; padding: 20px 18px; border-radius: 16px; background: #fff; border: 1px solid #DDCFF7; border-top: 3px solid var(--v500); box-shadow: 0 12px 20px -18px rgba(59,23,130,0.45); }
-.vm-expect h3 { margin: 4px 0 0; font-size: 15px; line-height: 20px; font-weight: 800; color: var(--v700); }
-.vm-expect p { margin: 0; font-size: 13px; line-height: 19px; color: var(--muted); }
 
 /* Trío de decisión: bloque principal + dos recorridos, con la composición de señales de Valoriza. */
 .vm-use { display: grid; gap: 14px; width: 100%; }
@@ -364,34 +347,23 @@ const VM_CSS = `
 .vm-sell ul { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 0; padding: 0; list-style: none; }
 .vm-sell li { padding: 6px 12px; border-radius: 999px; font-size: 12px; line-height: 16px; font-weight: 700; color: #fff;
   background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.35); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
-.vm-use__opts { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-auto-rows: 132px; text-align: left; gap: 14px; margin: 0; padding: 0; list-style: none; }
-.vm-use__opts li { position: relative; min-height: 0; overflow: hidden; border: 1px solid #DDCFF7; border-radius: 16px; background: #fff; box-shadow: 0 12px 20px -18px rgba(59,23,130,0.45); }
-.vm-use__opts a { position: relative; z-index: 1; display: grid; grid-template-columns: 64px minmax(0, 1fr) 20px; align-items: center; gap: 14px; height: 100%; padding: 18px 22px 18px 18px;
-  color: var(--muted); font-size: 13px; line-height: 18px; text-decoration: none; transition: background-color 200ms var(--ease), transform 200ms var(--ease); }
-.vm-use__opts a:hover { background: var(--lav); }
-.vm-use__opts a:focus-visible { outline: 2px solid var(--v500); outline-offset: 2px; }
-.vm-use__opts img { width: 64px; height: 64px; border-radius: 12px; object-fit: cover; display: block; }
-.vm-use__opts strong { display: block; font-size: 15px; line-height: 20px; font-weight: 800; color: var(--v700); }
-.vm-use__opts svg { color: var(--orange); transition: transform 200ms var(--ease); }
-.vm-use__opts a:hover svg { transform: translateX(3px); }
-.vm-use__opts li:nth-child(2) { border-color: transparent; background: linear-gradient(126deg, #32136F 0%, #4E22A9 58%, #7B4BE3 100%); }
-.vm-use__opts li:nth-child(2)::after { display: none; content: ""; position: absolute; top: -34px; right: -20px; bottom: -34px; width: 43%; opacity: 0.68;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12)); }
-.vm-use__opts li:nth-child(2) a { color: #E8DDFF; }
-.vm-use__opts li:nth-child(2) a { grid-template-columns: minmax(0, 1fr) 20px; }
-.vm-use__opts li:nth-child(2) a:hover { background: rgba(255,255,255,0.07); }
-.vm-use__opts li:nth-child(2) img { position: absolute; z-index: -1; inset: 0; width: 100%; height: 100%; border-radius: 0; object-fit: cover; object-position: 100% 30%; }
-.vm-use__opts li:nth-child(2) strong { color: #fff; }
-.vm-use__opts li:nth-child(2) span { max-width: 50%; }
-.vm-use__opts li:nth-child(2) svg { color: var(--peach); }
-/* Las dos tarjetas con foto de campaña a sangre: la de artículos en claro (camino principal), la del carro en oscuro.
-   La flecha sale en ambas: la tarjeta entera es el enlace y en la del carro tapaba el ícono. */
-.vm-use__opts li:first-child { background: linear-gradient(120deg, #FFFFFF 0%, var(--lav) 55%, #E8DDFF 100%); }
-.vm-use__opts li:first-child a { grid-template-columns: minmax(0, 1fr); }
-.vm-use__opts li:first-child img { position: absolute; z-index: -1; top: 0; right: 0; width: 52%; height: 100%; border-radius: 0; object-fit: cover; object-position: 50% 40%;
-  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 38%); mask-image: linear-gradient(90deg, transparent 0%, #000 38%); }
-.vm-use__opts li:first-child span { max-width: 50%; }
-.vm-use__opts a > svg { display: none; }
+/* Dos accesos con la misma anatomía clara: texto a la izquierda, foto de campaña a la derecha fundida con el lavanda. */
+.vm-use__opts { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-auto-rows: 168px; gap: 14px; margin: 0; padding: 0; list-style: none; text-align: left; }
+.vm-use__opts li { position: relative; isolation: isolate; overflow: hidden; border: 1px solid #DDCFF7; border-radius: 18px; background: linear-gradient(120deg, #FFFFFF 0%, var(--lav) 60%, #EFE7FF 100%);
+  box-shadow: 0 12px 20px -18px rgba(59,23,130,0.45); transition: border-color 200ms var(--ease), box-shadow 200ms var(--ease), transform 200ms var(--ease); }
+.vm-use__opts li:hover { border-color: #CDBDF5; box-shadow: 0 18px 28px -20px rgba(59,23,130,0.55); transform: translateY(-2px); }
+.vm-use__opts a { display: flex; align-items: center; height: 100%; padding: 22px 24px; color: var(--muted); font-size: 14px; line-height: 20px; text-decoration: none; }
+.vm-use__opts a:focus-visible { outline: 2px solid var(--v500); outline-offset: -3px; border-radius: 18px; }
+.vm-use__opts span { display: grid; gap: 4px; max-width: 48%; }
+.vm-use__opts strong { font-size: 18px; line-height: 23px; font-weight: 800; letter-spacing: -0.02em; color: var(--v700); }
+.vm-use__opts em { justify-self: start; margin-top: 8px; font-size: 14px; line-height: 20px; font-weight: 800; color: var(--orange); }
+.vm-use__opts em::after { content: " →"; display: inline-block; transition: transform 200ms var(--ease); }
+.vm-use__opts li:hover em::after { transform: translateX(3px); }
+.vm-use__opts img { position: absolute; z-index: -1; top: 0; right: 0; width: 56%; height: 100%; object-fit: cover; display: block;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 34%); mask-image: linear-gradient(90deg, transparent 0%, #000 34%); }
+.vm-use__opts li:first-child img { object-position: 50% 40%; }
+/* La escena del carro ya viene en blanco a la izquierda: se ancla a la derecha sin máscara. */
+.vm-use__opts li:nth-child(2) img { width: 100%; object-position: 100% 30%; -webkit-mask-image: none; mask-image: none; }
 
 /* Franja del canal: composición y medidas del banner de próximas ofertas de Valoriza. */
 .vm-whatsapp { position: relative; isolation: isolate; justify-self: stretch; width: 100%; height: 120px; overflow: hidden; border-radius: 16px;
@@ -476,18 +448,14 @@ const VM_CSS = `
   .vm-know { grid-template-columns: minmax(0, 1fr); }
   .vm-video { width: min(100%, 244px); }
   .vm-center .pvbtn { width: 100%; }
-  .vm-expect { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; padding: 0; }
-  .vm-expect li { min-height: 180px; padding: 14px 12px; }
   .vm-sell { min-height: 420px; align-items: end; padding: 20px; }
   .vm-sell::before { background: linear-gradient(0deg, rgba(46,15,112,0.96) 0%, rgba(59,23,130,0.8) 45%, transparent 75%); }
   .vm-sell figcaption { max-width: none; }
   .vm-sell h2 { font-size: 24px; }
-  .vm-use__opts { grid-template-columns: minmax(0, 1fr); grid-auto-rows: auto; gap: 10px; }
-  .vm-use__opts li:first-child { height: 160px; }
-  .vm-use__opts li:nth-child(2) { height: 185px; }
-  .vm-use__opts li, .vm-use__opts a { min-height: 0; }
-  .vm-use__opts a { grid-template-columns: 56px minmax(0, 1fr) 20px; padding: 14px; }
-  .vm-use__opts img { width: 56px; height: 56px; }
+  .vm-use__opts { grid-template-columns: minmax(0, 1fr); grid-auto-rows: 150px; gap: 10px; }
+  .vm-use__opts a { padding: 16px; }
+  .vm-use__opts span { max-width: 54%; }
+  .vm-use__opts strong { font-size: 16px; line-height: 21px; }
   .vm-whatsapp { width: min(100%, 388px); height: auto; aspect-ratio: 388 / 120; }
   .vm-whatsapp__glow--left { left: -18%; top: -67%; width: 41%; height: auto; aspect-ratio: 1; filter: blur(35px); }
   .vm-whatsapp__glow--right { display: none; }
