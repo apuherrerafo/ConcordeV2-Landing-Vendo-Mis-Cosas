@@ -48,11 +48,15 @@ const EXPECT: { icon: Sec; title: string; text: string }[] = [
   { icon: "publicar", title: "Y mucho más", text: "Electrodomésticos, instrumentos musicales y lo que ya no usas." },
 ];
 
-// Dos usos: artículos (este recorrido) y autos (su recorrido propio, Valorizar → Publicar).
+// Dos accesos (Julio 26/11): uno lleva a publicar artículos; el otro rescata a quien llegó buscando vender su carro
+// (recorrido propio: Valorizar → Publicar).
 const USES = [
-  { img: `${IMG}/uso-vender.jpg`, href: PUBLICAR, title: "¿Tienes algo que vender?", text: "Publica tus artículos en VMC." },
-  { img: `${IMG}/vende-auto.jpg`, href: VALUAR, title: "¿Vendes tu auto?", text: "Los autos tienen su propio recorrido: valorizas y luego publicas." },
+  { img: `${IMG}/publica.jpg`, href: PUBLICAR, title: "¿Tienes algo que ya no usas?", text: "Publícalo en VMC y recibe propuestas." },
+  { img: `${IMG}/vende-auto.jpg`, href: VALUAR, title: "¿O lo que buscabas era vender tu carro?", text: "Haz clic aquí: valorízalo y publícalo en VMC." },
 ];
+
+// Lo que se ve en el banner gráfico (departamentos del prototipo v4, taxonomía demostrativa).
+const SURTIDO = ["Tecnología", "Electrodomésticos", "Hogar y muebles", "Herramientas", "Instrumentos musicales"];
 
 // «Lo que debes saber»: lo que pide el formulario (prototipo v4), en lenguaje llano.
 const KNOW = [
@@ -66,9 +70,11 @@ const FAQ: [string, string][] = [
   ["¿Qué es Vendo Mis Cosas?", "Es la forma de publicar artículos en VMC, definir una expectativa de venta y recibir propuestas tras la aprobación."],
   ["¿Qué puedo vender?", "Tecnología, electrodomésticos, muebles, herramientas, instrumentos musicales y más."],
   ["¿Cómo publico un artículo?", "Preparas fotos, título, descripción, categoría y expectativa de venta. Luego lo envías a revisión."],
+  // Costo dado por Julio (26/11): 10 SubasCoins, un solo pago. Pendiente reflejarlo en T&C / Centro de Ayuda.
+  ["¿Cuánto cuesta publicar?", "Publicar un artículo cuesta 10 SubasCoins. Es un solo pago hasta que lo vendas."],
   ["¿Quién define la expectativa de venta?", "Tú. También decides si negocias las propuestas que recibas."],
   ["¿Cómo se coordina la entrega?", "Entre las partes, durante la negociación que acuerden."],
-  ["¿Y si quiero vender mi auto?", "Los autos conservan su propio recorrido: primero los valorizas y luego los publicas."],
+  ["¿Y si quiero vender mi carro?", "Los carros tienen su propio recorrido: primero lo valorizas y luego lo publicas."],
   ["¿Dónde veo mis publicaciones?", "En Mi Garaje, en Mis publicaciones."],
 ];
 
@@ -160,13 +166,16 @@ function VendoBody({ id }: { id: "d" | "m" }): JSX.Element {
         <p className="vm-pill"><span>¿Qué puedes vender?</span></p>
         <h2 className="vm-title vm-categories-title">Tecnología, hogar, herramientas y más<br /><span>Elige, publica y recibe propuestas</span></h2>
         <section className="vm-use" aria-label="Vende en VMC">
-          <div className="vm-sell">
-            <div className="vm-sell__photo"><img src={`${IMG}/banner.jpg`} alt="" loading="lazy" /></div>
-            <p className="vm-sell__kicker">Menos acumulado. Más opciones para vender.</p>
-            <h2>Elige un artículo, <span>publícalo en VMC</span></h2>
-            <p>Tecnología, muebles, herramientas y más. Publica el artículo que quieras vender y decide si negocias cuando recibas propuestas.</p>
-            <Button variant="primary" onClick={publicar}>Publicar mis cosas</Button>
-          </div>
+          {/* Banner gráfico, sin botón (Julio 26/11): responde al título de arriba mostrando todo lo que se puede publicar.
+              Imagen de campaña de Fernando (obligatoria). Los accesos van en las dos tarjetas de abajo. */}
+          <figure className="vm-sell">
+            <img className="vm-sell__photo" src={`${IMG}/surtido.jpg`} alt="Sala llena de artículos: laptops, televisor, refrigeradora, lavadora y teléfonos" loading="lazy" />
+            <figcaption>
+              <p className="vm-sell__kicker">Así de fácil</p>
+              <h2>De la tele a la lavadora, <span>todo puede tener otro dueño</span></h2>
+              <ul aria-label="Qué puedes publicar">{SURTIDO.map((c) => <li key={c}>{c}</li>)}</ul>
+            </figcaption>
+          </figure>
           <ul className="vm-use__opts">
             {USES.map((u) => (
               <li key={u.title}>
@@ -343,17 +352,19 @@ const VM_CSS = `
 
 /* Trío de decisión: bloque principal + dos recorridos, con la composición de señales de Valoriza. */
 .vm-use { display: grid; gap: 14px; width: 100%; }
-.vm-sell { position: relative; overflow: hidden; isolation: isolate; display: grid; align-content: center; justify-items: start; gap: 10px; min-height: 240px; padding: 32px 36px 29px; border-radius: 20px; color: #fff;
-  background: radial-gradient(90% 120% at -10% 120%, rgba(239,133,46,0.85) 0%, rgba(239,133,46,0.3) 30%, transparent 58%), linear-gradient(120deg, #32136F 0%, #4E22A9 60%, #7B4BE3 100%); }
+/* Banner gráfico: la foto de campaña ocupa todo el bloque y el violeta de la marca entra desde la izquierda para el texto. */
+.vm-sell { position: relative; overflow: hidden; isolation: isolate; display: grid; align-items: center; min-height: 300px; margin: 0; padding: 32px 36px; border-radius: 20px; color: #fff; background: var(--v800); text-align: left; }
+.vm-sell__photo { position: absolute; z-index: -2; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 60% 45%; display: block; }
+.vm-sell::before { content: ""; position: absolute; z-index: -1; inset: 0; pointer-events: none;
+  background: radial-gradient(70% 110% at -5% 115%, rgba(237,137,54,0.55) 0%, transparent 55%), linear-gradient(90deg, rgba(46,15,112,0.96) 0%, rgba(59,23,130,0.86) 34%, rgba(59,23,130,0.25) 62%, transparent 80%); }
+.vm-sell figcaption { display: grid; justify-items: start; gap: 12px; max-width: 46%; }
 .vm-sell__kicker { margin: 0; font-size: 12px; line-height: 16px; font-weight: 700; color: var(--peach); }
-.vm-sell h2 { margin: 0; max-width: 18ch; font-size: 30px; line-height: 1.08; font-weight: 800; letter-spacing: -0.03em; }
+.vm-sell h2 { margin: 0; font-size: 30px; line-height: 1.08; font-weight: 800; letter-spacing: -0.03em; }
 .vm-sell h2 span { display: block; color: var(--peach); }
-.vm-sell > p:not(.vm-sell__kicker) { margin: 0 0 6px; max-width: 40ch; font-size: 14px; line-height: 21px; color: rgba(255,255,255,0.86); }
-/* Foto de campaña a la derecha, fundida con el degradado (misma receta que .vm-hero__photo). */
-.vm-sell__photo { position: absolute; z-index: -1; top: 0; right: 0; bottom: 0; width: 46%; pointer-events: none;
-  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 40%); mask-image: linear-gradient(90deg, transparent 0%, #000 40%); }
-.vm-sell__photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; display: block; }
-.vm-use__opts { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-auto-rows: 201px; gap: 14px; margin: 0; padding: 0; list-style: none; }
+.vm-sell ul { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 0; padding: 0; list-style: none; }
+.vm-sell li { padding: 6px 12px; border-radius: 999px; font-size: 12px; line-height: 16px; font-weight: 700; color: #fff;
+  background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.35); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.vm-use__opts { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-auto-rows: 132px; text-align: left; gap: 14px; margin: 0; padding: 0; list-style: none; }
 .vm-use__opts li { position: relative; min-height: 0; overflow: hidden; border: 1px solid #DDCFF7; border-radius: 16px; background: #fff; box-shadow: 0 12px 20px -18px rgba(59,23,130,0.45); }
 .vm-use__opts a { position: relative; z-index: 1; display: grid; grid-template-columns: 64px minmax(0, 1fr) 20px; align-items: center; gap: 14px; height: 100%; padding: 18px 22px 18px 18px;
   color: var(--muted); font-size: 13px; line-height: 18px; text-decoration: none; transition: background-color 200ms var(--ease), transform 200ms var(--ease); }
@@ -372,6 +383,7 @@ const VM_CSS = `
 .vm-use__opts li:nth-child(2) img { position: absolute; z-index: -1; top: 0; right: 0; width: 43%; height: 100%; border-radius: 0; opacity: 0.78;
   -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 48%); mask-image: linear-gradient(90deg, transparent 0%, #000 48%); }
 .vm-use__opts li:nth-child(2) strong { color: #fff; }
+.vm-use__opts li:nth-child(2) span { max-width: 62%; }
 .vm-use__opts li:nth-child(2) svg { color: var(--peach); }
 
 /* Franja del canal: composición y medidas del banner de próximas ofertas de Valoriza. */
@@ -386,7 +398,7 @@ const VM_CSS = `
 .vm-whatsapp h2 span { background: linear-gradient(166deg, #ED8936 0%, #ED8936 25%, #8460E5 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .vm-whatsapp__cta { position: absolute; z-index: 2; top: 60px; left: 20px; display: inline-flex; align-items: center; justify-content: center; width: 306px; height: 40px; padding: 0; border-radius: 999px;
   color: #fff; font-size: 13px; line-height: 18px; font-weight: 600; text-decoration: none; white-space: nowrap; border: 1.5px solid transparent;
-  background: linear-gradient(180deg, rgba(255,255,255,0.30) 0%, rgba(255,255,255,0.08) 45%, rgba(43,13,111,0.24) 100%) padding-box, linear-gradient(104deg, #F4AC59 0%, #FFFFFF 17%, #8460E5 100%) border-box;
+  background: linear-gradient(180deg, rgba(255,255,255,0.30) 0%, rgba(255,255,255,0.08) 45%, rgba(43,13,111,0.24) 100%) padding-box, linear-gradient(#4E22A9, #4E22A9) padding-box, linear-gradient(104deg, #F4AC59 0%, #FFFFFF 17%, #8460E5 100%) border-box;
   box-shadow: 0 8px 24px rgba(0,0,0,0.1), inset 0 1px 6px rgba(255,255,255,0.42); }
 .vm-whatsapp__cta:hover { opacity: 0.92; }
 .vm-whatsapp__cta:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
@@ -459,10 +471,10 @@ const VM_CSS = `
   .vm-center .pvbtn { width: 100%; }
   .vm-expect { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; padding: 0; }
   .vm-expect li { min-height: 180px; padding: 14px 12px; }
-  .vm-sell { padding: 24px 20px 260px; }
+  .vm-sell { min-height: 420px; align-items: end; padding: 20px; }
+  .vm-sell::before { background: linear-gradient(0deg, rgba(46,15,112,0.96) 0%, rgba(59,23,130,0.8) 45%, transparent 75%); }
+  .vm-sell figcaption { max-width: none; }
   .vm-sell h2 { font-size: 24px; }
-  .vm-sell .pvbtn { width: 100%; }
-  .vm-sell__photo { top: auto; left: 0; width: 100%; height: 260px; -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 35%); mask-image: linear-gradient(180deg, transparent 0%, #000 35%); }
   .vm-use__opts { grid-template-columns: minmax(0, 1fr); grid-auto-rows: auto; gap: 10px; }
   .vm-use__opts li:first-child { height: 160px; }
   .vm-use__opts li:nth-child(2) { height: 185px; }
