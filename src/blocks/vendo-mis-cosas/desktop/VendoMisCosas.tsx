@@ -40,19 +40,15 @@ const PERKS: { icon: Sec; title: string; text: string }[] = [
   { icon: "texto", title: "Publicación clara", text: "Fotos, detalles y categoría" },
 ];
 
-// Qué puedes vender: departamentos del prototipo v4 (taxonomía demostrativa, pendiente la oficial).
-const EXPECT: { icon: Sec; title: string; text: string }[] = [
-  { icon: "articulos", title: "Tecnología", text: "Laptops, celulares, consolas, audio, cámaras y TV." },
-  { icon: "mobiliario", title: "Hogar y muebles", text: "Sofás, mesas, sillas, camas e iluminación." },
-  { icon: "equipos", title: "Herramientas y oficina", text: "Herramientas, equipos industriales y de oficina." },
-  { icon: "publicar", title: "Y mucho más", text: "Electrodomésticos, instrumentos musicales y lo que ya no usas." },
+// Dos accesos (Julio 26/11): uno lleva a publicar artículos; el otro rescata a quien llegó buscando vender su carro
+// (recorrido propio: Valorizar → Publicar).
+const USES = [
+  { img: `${IMG}/publica.jpg`, href: PUBLICAR, title: "¿Algo que ya no usas?", text: "Publícalo en VMC y recibe propuestas.", cta: "Publicar", variant: "primary" as const },
+  { img: `${IMG}/vende-carro.jpg`, href: VALUAR, title: "¿O lo que buscabas era vender tu carro?", text: "Valorízalo y publícalo en VMC.", cta: "Valorizar", variant: "secondary" as const },
 ];
 
-// Dos usos: artículos (este recorrido) y autos (su recorrido propio, Valorizar → Publicar).
-const USES = [
-  { img: `${IMG}/uso-vender.jpg`, href: PUBLICAR, title: "¿Tienes algo que vender?", text: "Publica tus artículos en VMC." },
-  { img: `${IMG}/vende-auto.jpg`, href: VALUAR, title: "¿Vendes tu auto?", text: "Los autos tienen su propio recorrido: valorizas y luego publicas." },
-];
+// Lo que se ve en el banner gráfico (departamentos del prototipo v4, taxonomía demostrativa).
+const SURTIDO = ["Tecnología", "Electrodomésticos", "Hogar y muebles", "Herramientas", "Instrumentos musicales"];
 
 // «Lo que debes saber»: lo que pide el formulario (prototipo v4), en lenguaje llano.
 const KNOW = [
@@ -66,9 +62,11 @@ const FAQ: [string, string][] = [
   ["¿Qué es Vendo Mis Cosas?", "Es la forma de publicar artículos en VMC, definir una expectativa de venta y recibir propuestas tras la aprobación."],
   ["¿Qué puedo vender?", "Tecnología, electrodomésticos, muebles, herramientas, instrumentos musicales y más."],
   ["¿Cómo publico un artículo?", "Preparas fotos, título, descripción, categoría y expectativa de venta. Luego lo envías a revisión."],
+  // Costo dado por Julio (26/11): 10 SubasCoins, un solo pago. Pendiente reflejarlo en T&C / Centro de Ayuda.
+  ["¿Cuánto cuesta publicar?", "Publicar un artículo cuesta 10 SubasCoins. Es un solo pago hasta que lo vendas."],
   ["¿Quién define la expectativa de venta?", "Tú. También decides si negocias las propuestas que recibas."],
   ["¿Cómo se coordina la entrega?", "Entre las partes, durante la negociación que acuerden."],
-  ["¿Y si quiero vender mi auto?", "Los autos conservan su propio recorrido: primero los valorizas y luego los publicas."],
+  ["¿Y si quiero vender mi carro?", "Los carros tienen su propio recorrido: primero lo valorizas y luego lo publicas."],
   ["¿Dónde veo mis publicaciones?", "En Mi Garaje, en Mis publicaciones."],
 ];
 
@@ -160,28 +158,28 @@ function VendoBody({ id }: { id: "d" | "m" }): JSX.Element {
         <p className="vm-pill"><span>¿Qué puedes vender?</span></p>
         <h2 className="vm-title vm-categories-title">Tecnología, hogar, herramientas y más<br /><span>Elige, publica y recibe propuestas</span></h2>
         <section className="vm-use" aria-label="Vende en VMC">
-          <div className="vm-sell">
-            <div className="vm-sell__photo"><img src={`${IMG}/banner.jpg`} alt="" loading="lazy" /></div>
-            <p className="vm-sell__kicker">Menos acumulado. Más opciones para vender.</p>
-            <h2>Elige un artículo, <span>publícalo en VMC</span></h2>
-            <p>Tecnología, muebles, herramientas y más. Publica el artículo que quieras vender y decide si negocias cuando recibas propuestas.</p>
-            <Button variant="primary" onClick={publicar}>Publicar mis cosas</Button>
-          </div>
+          {/* Banner gráfico, sin botón (Julio 26/11): responde al título de arriba mostrando todo lo que se puede publicar.
+              Imagen de campaña de Fernando (obligatoria). Los accesos van en las dos tarjetas de abajo. */}
+          <figure className="vm-sell">
+            <img className="vm-sell__photo" src={`${IMG}/surtido.jpg`} alt="Sala llena de artículos: laptops, televisor, refrigeradora, lavadora y teléfonos" loading="lazy" />
+            <figcaption>
+              <h2>De la tele a la lavadora, <span>todo puede tener otro dueño</span></h2>
+              <ul aria-label="Qué puedes publicar">{SURTIDO.map((c) => <li key={c}>{c}</li>)}</ul>
+            </figcaption>
+          </figure>
           <ul className="vm-use__opts">
             {USES.map((u) => (
               <li key={u.title}>
-                <a href={u.href}>
+                <div>
                   <img src={u.img} alt="" loading="lazy" />
                   <span><strong>{u.title}</strong>{u.text}</span>
-                  <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden><path d="M7.5 5l5 5-5 5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                </a>
+                  {/* CTA con el Button de Concorde (primary = camino principal, secondary = recorrido del carro). */}
+                  <Button variant={u.variant} onClick={() => router.push(u.href)}>{u.cta}</Button>
+                </div>
               </li>
             ))}
           </ul>
         </section>
-        <ul className="vm-expect">
-          {EXPECT.map((e) => <li key={e.title}><Vidrio s={e.icon} size={40} /><h3>{e.title}</h3><p>{e.text}</p></li>)}
-        </ul>
       </section>
 
       {/* ── Canal de WhatsApp: misma franja de próximas ofertas de Valoriza. ── */}
@@ -189,7 +187,6 @@ function VendoBody({ id }: { id: "d" | "m" }): JSX.Element {
         <i className="vm-whatsapp__glow vm-whatsapp__glow--left" aria-hidden />
         <i className="vm-whatsapp__glow vm-whatsapp__glow--right" aria-hidden />
         <i className="vm-whatsapp__glow vm-whatsapp__glow--orange" aria-hidden />
-        <i className="vm-whatsapp__glow vm-whatsapp__glow--green" aria-hidden />
         <h2>¡Entérate primero de las <span>próximas ofertas!</span></h2>
         <a
           className="vm-whatsapp__cta"
@@ -200,11 +197,11 @@ function VendoBody({ id }: { id: "d" | "m" }): JSX.Element {
         >
           ¡Únete a nuestro canal oficial de WhatsApp!
         </a>
-        <img
-          src="https://cdn.vmcsubastas.com/services/assets/landing-subascars/whatsapp-people.png"
-          alt="Personas revisando notificaciones de próximas ofertas por WhatsApp"
-          loading="lazy"
-        />
+        {/* Escena de Flow con Tino y Tina (hojas de Prisma) e ícono de vidrio esmerilado; receta en Prisma/recetas/vendo-mis-cosas-carro/. */}
+        {/* EXCEPCIÓN A LA REGLA DE LOGOS (26/11, pedido de Abraham): logo de WhatsApp recreado en vidrio esmerilado con IA.
+            Pendiente de aprobación de Julio/Edge antes de publicar; si no se aprueba, cambiar por un ícono propio (burbuja + campana). */}
+        <img className="vm-whatsapp__icon" src={`${IMG}/whatsapp-esmerilado.png`} alt="" aria-hidden width={416} height={440} loading="lazy" />
+        <img src={`${IMG}/whatsapp-tino-tina.jpg`} alt="Tino y Tina revisando una alerta de nuevas ofertas en el celular" loading="lazy" />
       </section>
 
       {/* ── Preguntas frecuentes ── */}
@@ -242,7 +239,7 @@ function VendoBody({ id }: { id: "d" | "m" }): JSX.Element {
 }
 
 const VM_CSS = `
-.vm { --ink: #191C1C; --muted: #6B6878; --v900: #1C0B4F; --v800: #2E0F70; --v700: #3B1782; --v500: #8460E5; --lav: #F5F0FF; --line: #ECE6FB; --peach: var(--vmc-color-orange-400, #FBC47D); --orange: var(--vmc-color-orange-600, #ED8936);
+.vm { --ink: #191C1C; --muted: #6B6878; --v900: #1C0B4F; --v800: #2E0F70; --v700: #3B1782; --v500: #8460E5; --lav: #F5F0FF; --line: #ECE6FB; --peach: var(--vmc-color-orange-600, #ED8936); --orange: var(--vmc-color-orange-600, #ED8936);
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
   width: 100%; padding: 16px 16px 64px; box-sizing: border-box; display: grid; gap: 16px; background: #fff; font-family: var(--vmc-font-display); color: var(--ink); }
 .vm *, .vm *::before, .vm *::after { box-sizing: border-box; }
@@ -300,7 +297,7 @@ const VM_CSS = `
 .vm-center .vm-pill:not(:first-child) { margin-top: 48px; }
 .vm-title { margin: 0; max-width: 22ch; font-size: 36px; line-height: 1.15; font-weight: 800; letter-spacing: -0.035em; color: var(--v700); }
 .vm-title span { color: var(--v500); }
-.vm-categories-title { max-width: none; text-align: center; white-space: nowrap; }
+.vm-categories-title { max-width: none; margin-bottom: 16px; text-align: center; white-space: nowrap; }
 .vm-center .vm-title { max-width: 26ch; background: linear-gradient(100deg, #6E4BD7 0%, #735BE3 50%, #3AB7D1 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .vm-center .vm-title span { color: inherit; }
 .vm-lead { margin: 0; max-width: 68ch; font-size: 15px; line-height: 23px; color: var(--v700); }
@@ -335,62 +332,64 @@ const VM_CSS = `
 .vm-video__controls b:nth-of-type(2) { border-radius: 50%; }
 .vm-video__controls b:nth-of-type(3) { width: 3px; height: 14px; border: 0; border-radius: 99px; background: #fff; box-shadow: 6px 0 #fff; }
 
-/* Qué esperar: cuatro tarjetas con ícono. */
-.vm-expect { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; width: 100%; margin: 12px 0 0; padding: 0; list-style: none; text-align: left; }
-.vm-expect li { display: grid; align-content: start; gap: 10px; min-height: 194px; padding: 20px 18px; border-radius: 16px; background: #fff; border: 1px solid #DDCFF7; border-top: 3px solid var(--v500); box-shadow: 0 12px 20px -18px rgba(59,23,130,0.45); }
-.vm-expect h3 { margin: 4px 0 0; font-size: 15px; line-height: 20px; font-weight: 800; color: var(--v700); }
-.vm-expect p { margin: 0; font-size: 13px; line-height: 19px; color: var(--muted); }
 
 /* Trío de decisión: bloque principal + dos recorridos, con la composición de señales de Valoriza. */
-.vm-use { display: grid; gap: 14px; width: 100%; }
-.vm-sell { position: relative; overflow: hidden; isolation: isolate; display: grid; align-content: center; justify-items: start; gap: 10px; min-height: 240px; padding: 32px 36px 29px; border-radius: 20px; color: #fff;
-  background: radial-gradient(90% 120% at -10% 120%, rgba(239,133,46,0.85) 0%, rgba(239,133,46,0.3) 30%, transparent 58%), linear-gradient(120deg, #32136F 0%, #4E22A9 60%, #7B4BE3 100%); }
-.vm-sell__kicker { margin: 0; font-size: 12px; line-height: 16px; font-weight: 700; color: var(--peach); }
-.vm-sell h2 { margin: 0; max-width: 18ch; font-size: 30px; line-height: 1.08; font-weight: 800; letter-spacing: -0.03em; }
+.vm-use { display: grid; gap: 12px; width: 100%; }
+/* Banner gráfico: la foto de campaña ocupa todo el bloque y el violeta de la marca entra desde la izquierda para el texto. */
+.vm-sell { position: relative; overflow: hidden; isolation: isolate; display: grid; align-items: center; min-height: 288px; margin: 0; padding: 40px 44px; border-radius: 20px; color: #fff; background: var(--v800); text-align: left; }
+.vm-sell__photo { position: absolute; z-index: -2; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 60% 45%; display: block; }
+.vm-sell::before { content: ""; position: absolute; z-index: -1; inset: 0; pointer-events: none;
+  background: radial-gradient(70% 110% at -5% 115%, rgba(237,137,54,0.55) 0%, transparent 55%), linear-gradient(90deg, rgba(46,15,112,0.96) 0%, rgba(59,23,130,0.86) 34%, rgba(59,23,130,0.25) 62%, transparent 80%); }
+.vm-sell figcaption { display: grid; justify-items: start; gap: 18px; max-width: 58%; }
+.vm-sell h2 { margin: 0; font-size: 32px; line-height: 1.08; font-weight: 800; letter-spacing: -0.03em; }
 .vm-sell h2 span { display: block; color: var(--peach); }
-.vm-sell > p:not(.vm-sell__kicker) { margin: 0 0 6px; max-width: 40ch; font-size: 14px; line-height: 21px; color: rgba(255,255,255,0.86); }
-/* Foto de campaña a la derecha, fundida con el degradado (misma receta que .vm-hero__photo). */
-.vm-sell__photo { position: absolute; z-index: -1; top: 0; right: 0; bottom: 0; width: 46%; pointer-events: none;
-  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 40%); mask-image: linear-gradient(90deg, transparent 0%, #000 40%); }
-.vm-sell__photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; display: block; }
-.vm-use__opts { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-auto-rows: 201px; gap: 14px; margin: 0; padding: 0; list-style: none; }
-.vm-use__opts li { position: relative; min-height: 0; overflow: hidden; border: 1px solid #DDCFF7; border-radius: 16px; background: #fff; box-shadow: 0 12px 20px -18px rgba(59,23,130,0.45); }
-.vm-use__opts a { position: relative; z-index: 1; display: grid; grid-template-columns: 64px minmax(0, 1fr) 20px; align-items: center; gap: 14px; height: 100%; padding: 18px 22px 18px 18px;
-  color: var(--muted); font-size: 13px; line-height: 18px; text-decoration: none; transition: background-color 200ms var(--ease), transform 200ms var(--ease); }
-.vm-use__opts a:hover { background: var(--lav); }
-.vm-use__opts a:focus-visible { outline: 2px solid var(--v500); outline-offset: 2px; }
-.vm-use__opts img { width: 64px; height: 64px; border-radius: 12px; object-fit: cover; display: block; }
-.vm-use__opts strong { display: block; font-size: 15px; line-height: 20px; font-weight: 800; color: var(--v700); }
-.vm-use__opts svg { color: var(--orange); transition: transform 200ms var(--ease); }
-.vm-use__opts a:hover svg { transform: translateX(3px); }
-.vm-use__opts li:nth-child(2) { border-color: transparent; background: linear-gradient(126deg, #32136F 0%, #4E22A9 58%, #7B4BE3 100%); }
-.vm-use__opts li:nth-child(2)::after { content: ""; position: absolute; top: -34px; right: -20px; bottom: -34px; width: 43%; opacity: 0.68;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12)); }
-.vm-use__opts li:nth-child(2) a { color: #E8DDFF; }
-.vm-use__opts li:nth-child(2) a { grid-template-columns: minmax(0, 1fr) 20px; }
-.vm-use__opts li:nth-child(2) a:hover { background: rgba(255,255,255,0.07); }
-.vm-use__opts li:nth-child(2) img { position: absolute; z-index: -1; top: 0; right: 0; width: 43%; height: 100%; border-radius: 0; opacity: 0.78;
-  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 48%); mask-image: linear-gradient(90deg, transparent 0%, #000 48%); }
-.vm-use__opts li:nth-child(2) strong { color: #fff; }
-.vm-use__opts li:nth-child(2) svg { color: var(--peach); }
+.vm-sell ul { display: flex; flex-wrap: wrap; gap: 8px; max-width: 520px; margin: 0; padding: 0; list-style: none; }
+.vm-sell li { padding: 6px 12px; border-radius: 999px; font-size: 12px; line-height: 16px; font-weight: 700; color: #fff;
+  background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.35); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+/* Dos accesos con la misma anatomía clara: texto a la izquierda, foto de campaña a la derecha fundida con el lavanda. */
+.vm-use__opts { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); grid-auto-rows: 184px; gap: 12px; margin: 0; padding: 0; list-style: none; text-align: left; }
+.vm-use__opts li { position: relative; isolation: isolate; overflow: hidden; border: 1px solid #DDCFF7; border-radius: 18px; background: linear-gradient(120deg, #FFFFFF 0%, var(--lav) 60%, #EFE7FF 100%);
+  box-shadow: 0 12px 20px -18px rgba(59,23,130,0.45); transition: border-color 200ms var(--ease), box-shadow 200ms var(--ease), transform 200ms var(--ease); }
+/* Retícula común a las dos tarjetas: título en caja de 2 líneas alineado abajo, subtítulo a la misma altura, botón al pie. */
+.vm-use__opts li > div { display: grid; grid-template-rows: auto 1fr; justify-items: start; height: 100%; padding: 22px 24px; color: var(--muted); font-size: 14px; line-height: 20px; }
+.vm-use__opts span { display: grid; grid-template-rows: 46px auto; row-gap: 6px; max-width: 52%; }
+.vm-use__opts .pvbtn, .vm-use__opts .psec { align-self: end; margin: 0; }
+.vm-use__opts li:nth-child(2) span { max-width: 54%; }
+.vm-center .vm-use__opts .pvbtn { width: auto; }
+.vm-use__opts strong { align-self: end; font-size: 18px; line-height: 23px; font-weight: 800; letter-spacing: -0.02em; color: var(--v700); }
+/* Botones de Concorde a escala de tarjeta (misma pieza, alto y aire compactos). */
+.vm-use__opts .pvbtn, .vm-use__opts .psec { height: 40px; padding: 0 28px; font-size: 14px; }
+.vm-use__opts img { position: absolute; z-index: -1; top: 0; right: 0; width: 56%; height: 100%; object-fit: cover; display: block;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 34%); mask-image: linear-gradient(90deg, transparent 0%, #000 34%); }
+/* La escena del carro ya viene en blanco a la izquierda: se ancla a la derecha sin máscara. */
+/* Las dos escenas de Flow ya vienen en blanco a la izquierda: foto completa anclada a la derecha, sin máscara. */
+.vm-use__opts li img { width: 100%; object-position: 100% 30%; -webkit-mask-image: none; mask-image: none; }
 
 /* Franja del canal: composición y medidas del banner de próximas ofertas de Valoriza. */
-.vm-whatsapp { position: relative; isolation: isolate; justify-self: stretch; width: 100%; height: 120px; overflow: hidden; border-radius: 16px;
+.vm-whatsapp { position: relative; isolation: isolate; justify-self: stretch; width: 100%; height: 160px; overflow: hidden; border-radius: 16px;
   background: linear-gradient(141deg, #340091 33%, #8460E5 92%, #ED8936 100%); }
 .vm-whatsapp__glow { position: absolute; z-index: 0; display: block; border-radius: 999px; pointer-events: none; }
 .vm-whatsapp__glow--left { left: -140px; top: -160px; width: 320px; height: 320px; background: rgba(95,62,216,0.55); filter: blur(35px); }
 .vm-whatsapp__glow--right { right: -94px; top: -120px; width: 320px; height: 320px; background: rgba(132,96,229,0.5); filter: blur(40px); }
 .vm-whatsapp__glow--orange { left: -171px; top: -88px; width: 320px; height: 320px; background: rgba(237,137,54,0.3); filter: blur(60px); }
-.vm-whatsapp__glow--green { right: 42px; top: -3px; width: 150px; height: 150px; background: rgba(37,211,102,0.55); filter: blur(24px); }
-.vm-whatsapp h2 { position: absolute; z-index: 2; top: 14px; left: 20px; width: 429px; margin: 0; color: #fff; font-size: 20px; line-height: 24px; font-weight: 800; letter-spacing: -0.025em; }
+.vm-whatsapp h2 { position: absolute; z-index: 2; top: 40px; left: 32px; width: 429px; margin: 0; color: #fff; font-size: 20px; line-height: 24px; font-weight: 800; letter-spacing: -0.025em; }
 .vm-whatsapp h2 span { background: linear-gradient(166deg, #ED8936 0%, #ED8936 25%, #8460E5 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.vm-whatsapp__cta { position: absolute; z-index: 2; top: 60px; left: 20px; display: inline-flex; align-items: center; justify-content: center; width: 306px; height: 40px; padding: 0; border-radius: 999px;
+.vm-whatsapp__cta { position: absolute; z-index: 2; top: 82px; left: 32px; display: inline-flex; align-items: center; justify-content: center; width: 306px; height: 40px; padding: 0; border-radius: 999px;
   color: #fff; font-size: 13px; line-height: 18px; font-weight: 600; text-decoration: none; white-space: nowrap; border: 1.5px solid transparent;
-  background: linear-gradient(180deg, rgba(255,255,255,0.30) 0%, rgba(255,255,255,0.08) 45%, rgba(43,13,111,0.24) 100%) padding-box, linear-gradient(104deg, #F4AC59 0%, #FFFFFF 17%, #8460E5 100%) border-box;
+  background: linear-gradient(180deg, rgba(255,255,255,0.30) 0%, rgba(255,255,255,0.08) 45%, rgba(43,13,111,0.24) 100%) padding-box, linear-gradient(#4E22A9, #4E22A9) padding-box, linear-gradient(104deg, #F4AC59 0%, #FFFFFF 17%, #8460E5 100%) border-box;
   box-shadow: 0 8px 24px rgba(0,0,0,0.1), inset 0 1px 6px rgba(255,255,255,0.42); }
 .vm-whatsapp__cta:hover { opacity: 0.92; }
 .vm-whatsapp__cta:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
-.vm-whatsapp > img { position: absolute; z-index: 1; top: -74px; right: 23px; width: 189px; height: 282px; object-fit: cover; }
+/* La escena se funde con el degradado: anclada a la derecha, a todo el alto, con máscara hacia la izquierda. */
+/* Ícono de vidrio en el hueco entre el CTA y la escena: sombra con desplazamiento y flotación lenta. */
+.vm-whatsapp__icon { position: absolute; z-index: 2; top: 50%; left: 57%; width: 112px; height: auto; transform: translateY(-50%) rotate(8deg) scaleX(-1);
+  filter: drop-shadow(0 14px 18px rgba(20,0,60,0.45)); pointer-events: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .vm-whatsapp__icon { animation: vm-float 5.5s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate; }
+  @keyframes vm-float { to { transform: translateY(calc(-50% - 8px)) rotate(4deg) scaleX(-1); } }
+}
+.vm-whatsapp > img:not(.vm-whatsapp__icon) { position: absolute; z-index: 1; top: 0; right: 0; height: 100%; width: auto; aspect-ratio: 800 / 418; object-fit: cover;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 28%); mask-image: linear-gradient(90deg, transparent 0%, #000 28%); }
 
 /* Preguntas frecuentes: título centrado y tarjetas numeradas (como Subascars), <details> nativo. */
 .vm-faq { display: grid; gap: 20px; padding: 32px 24px; }
@@ -457,26 +456,24 @@ const VM_CSS = `
   .vm-know { grid-template-columns: minmax(0, 1fr); }
   .vm-video { width: min(100%, 244px); }
   .vm-center .pvbtn { width: 100%; }
-  .vm-expect { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; padding: 0; }
-  .vm-expect li { min-height: 180px; padding: 14px 12px; }
-  .vm-sell { padding: 24px 20px 260px; }
+  .vm-sell { min-height: 420px; align-items: end; padding: 20px; }
+  .vm-sell::before { background: linear-gradient(0deg, rgba(46,15,112,0.96) 0%, rgba(59,23,130,0.8) 45%, transparent 75%); }
+  .vm-sell figcaption { max-width: none; }
   .vm-sell h2 { font-size: 24px; }
-  .vm-sell .pvbtn { width: 100%; }
-  .vm-sell__photo { top: auto; left: 0; width: 100%; height: 260px; -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 35%); mask-image: linear-gradient(180deg, transparent 0%, #000 35%); }
-  .vm-use__opts { grid-template-columns: minmax(0, 1fr); grid-auto-rows: auto; gap: 10px; }
-  .vm-use__opts li:first-child { height: 160px; }
-  .vm-use__opts li:nth-child(2) { height: 185px; }
-  .vm-use__opts li, .vm-use__opts a { min-height: 0; }
-  .vm-use__opts a { grid-template-columns: 56px minmax(0, 1fr) 20px; padding: 14px; }
-  .vm-use__opts img { width: 56px; height: 56px; }
-  .vm-whatsapp { width: min(100%, 388px); height: auto; aspect-ratio: 388 / 120; }
+  .vm-use__opts { grid-template-columns: minmax(0, 1fr); grid-auto-rows: 168px; gap: 10px; }
+  .vm-use__opts li > div { padding: 16px; }
+  .vm-use__opts span, .vm-use__opts li:nth-child(2) span { max-width: 50%; font-size: 13px; line-height: 18px; }
+  .vm-use__opts li:nth-child(2) span { max-width: 58%; }
+  .vm-use__opts li:nth-child(2) img { transform: translateX(14%); }
+  .vm-use__opts strong { font-size: 16px; line-height: 21px; }
+  .vm-whatsapp { width: 100%; height: 200px; }
   .vm-whatsapp__glow--left { left: -18%; top: -67%; width: 41%; height: auto; aspect-ratio: 1; filter: blur(35px); }
   .vm-whatsapp__glow--right { display: none; }
   .vm-whatsapp__glow--orange { left: -22%; top: -37%; width: 41%; height: auto; aspect-ratio: 1; filter: blur(60px); }
-  .vm-whatsapp__glow--green { right: auto; left: 74%; top: -2%; width: 19%; height: auto; aspect-ratio: 1; filter: blur(24px); }
-  .vm-whatsapp h2 { top: 4%; left: 3%; width: 46%; font-size: clamp(14px, 4.6vw, 18px); line-height: 1.15; }
-  .vm-whatsapp__cta { top: 66%; right: 3%; left: auto; width: 75%; height: 34%; padding: 0 8px; font-size: clamp(11px, 3.2vw, 14px); }
-  .vm-whatsapp > img { top: -67%; right: auto; left: 53%; width: 45%; height: 218%; }
+  .vm-whatsapp h2 { top: 20px; left: 20px; width: 46%; font-size: 18px; line-height: 21px; }
+  .vm-whatsapp__cta { top: auto; bottom: 16px; left: 16px; right: 16px; width: auto; height: 44px; padding: 0 12px; font-size: 14px; }
+  .vm-whatsapp__icon { left: 41%; top: 54%; width: 48px; }
+  .vm-whatsapp > img:not(.vm-whatsapp__icon) { top: 0; left: auto; right: 0; width: 66%; height: 100%; object-position: 88% 0; }
   .vm-faq { padding: 24px 12px; }
   .vm-faq summary { padding: 0 12px 0 16px; }
   .vm-faq details p { padding: 0 16px 16px; }
