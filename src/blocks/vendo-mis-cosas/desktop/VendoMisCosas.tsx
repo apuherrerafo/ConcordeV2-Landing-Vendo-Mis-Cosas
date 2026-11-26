@@ -14,7 +14,6 @@ import type { JSX } from "react";
 import { useRouter } from "next/navigation";
 
 import Button from "@/src/components/Button";
-import ProfileButton from "@/src/components/ProfileButton";
 import { GLASS_CSS } from "@/src/components/GlassButton";
 import { Vidrio, type Sec } from "@/src/components/Vidrio";
 import LandingShell from "@/src/blocks/landing-shell/desktop/LandingShell";
@@ -44,8 +43,8 @@ const PERKS: { icon: Sec; title: string; text: string }[] = [
 // Dos accesos (Julio 26/11): uno lleva a publicar artículos; el otro rescata a quien llegó buscando vender su carro
 // (recorrido propio: Valorizar → Publicar).
 const USES = [
-  { img: `${IMG}/publica.jpg`, href: PUBLICAR, title: "¿Algo que ya no usas?", text: "Publícalo en VMC y recibe propuestas.", cta: "Publicar mis cosas", variant: "primary" as const },
-  { img: `${IMG}/vende-carro.jpg`, href: VALUAR, title: "¿O lo que buscabas era vender tu carro?", text: "Valorízalo y publícalo en VMC.", cta: "Valorizar mi carro", variant: "secondary" as const },
+  { img: `${IMG}/publica.jpg`, href: PUBLICAR, title: "¿Algo que ya no usas?", text: "Publícalo en VMC y recibe propuestas.", cta: "Publicar", variant: "primary" as const },
+  { img: `${IMG}/vende-carro.jpg`, href: VALUAR, title: "¿O lo que buscabas era vender tu carro?", text: "Valorízalo y publícalo en VMC.", cta: "Valorizar", variant: "secondary" as const },
 ];
 
 // Lo que se ve en el banner gráfico (departamentos del prototipo v4, taxonomía demostrativa).
@@ -164,21 +163,19 @@ function VendoBody({ id }: { id: "d" | "m" }): JSX.Element {
           <figure className="vm-sell">
             <img className="vm-sell__photo" src={`${IMG}/surtido.jpg`} alt="Sala llena de artículos: laptops, televisor, refrigeradora, lavadora y teléfonos" loading="lazy" />
             <figcaption>
-              <h3>De la tele a la lavadora, <span>todo puede tener otro dueño</span></h3>
+              <p className="vm-sell__kicker">Así de fácil</p>
+              <h2>De la tele a la lavadora, <span>todo puede tener otro dueño</span></h2>
               <ul aria-label="Qué puedes publicar">{SURTIDO.map((c) => <li key={c}>{c}</li>)}</ul>
             </figcaption>
           </figure>
           <ul className="vm-use__opts">
             {USES.map((u) => (
               <li key={u.title}>
-                <img src={u.img} alt="" loading="lazy" />
                 <div>
-                  <h3>{u.title}</h3>
-                  <p>{u.text}</p>
-                  {/* Jerarquía: un solo naranja (Publicar, camino principal); el carro con ProfileButton, como los tiles de Valoriza. */}
-                  {u.variant === "primary"
-                    ? <Button variant="primary" onClick={() => router.push(u.href)}>{u.cta}</Button>
-                    : <ProfileButton href={u.href}>{u.cta}</ProfileButton>}
+                  <img src={u.img} alt="" loading="lazy" />
+                  <span><strong>{u.title}</strong>{u.text}</span>
+                  {/* CTA con el Button de Concorde (primary = camino principal, secondary = recorrido del carro). */}
+                  <Button variant={u.variant} onClick={() => router.push(u.href)}>{u.cta}</Button>
                 </div>
               </li>
             ))}
@@ -341,30 +338,31 @@ const VM_CSS = `
 /* Trío de decisión: bloque principal + dos recorridos, con la composición de señales de Valoriza. */
 .vm-use { display: grid; gap: 14px; width: 100%; }
 /* Banner gráfico: la foto de campaña ocupa todo el bloque y el violeta de la marca entra desde la izquierda para el texto. */
-.vm-sell { position: relative; overflow: hidden; isolation: isolate; display: grid; align-items: center; min-height: 300px; margin: 0; padding: 32px 36px 72px; border-radius: 20px; color: #fff; background: var(--v800); text-align: left; }
+.vm-sell { position: relative; overflow: hidden; isolation: isolate; display: grid; align-items: center; min-height: 300px; margin: 0; padding: 32px 36px; border-radius: 20px; color: #fff; background: var(--v800); text-align: left; }
 .vm-sell__photo { position: absolute; z-index: -2; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 60% 45%; display: block; }
 .vm-sell::before { content: ""; position: absolute; z-index: -1; inset: 0; pointer-events: none;
   background: radial-gradient(70% 110% at -5% 115%, rgba(237,137,54,0.55) 0%, transparent 55%), linear-gradient(90deg, rgba(46,15,112,0.96) 0%, rgba(59,23,130,0.86) 34%, rgba(59,23,130,0.25) 62%, transparent 80%); }
-.vm-sell figcaption { display: contents; }
-/* Un escalón bajo el título de sección (escala de Valoriza: 36 → 26). Sin naranja: el naranja queda para la acción. */
-.vm-sell h3 { align-self: start; max-width: 15ch; margin: 0; font-size: 26px; line-height: 30px; font-weight: 800; letter-spacing: -0.03em; color: #fff; }
-.vm-sell h3 span { display: block; color: #DCCFFF; }
-/* Etiquetas en una sola fila al pie, como leyenda del gráfico. */
-.vm-sell ul { position: absolute; left: 36px; right: 36px; bottom: 24px; display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.vm-sell figcaption { display: grid; justify-items: start; gap: 12px; max-width: 46%; }
+.vm-sell__kicker { margin: 0; font-size: 12px; line-height: 16px; font-weight: 700; color: var(--peach); }
+.vm-sell h2 { margin: 0; font-size: 30px; line-height: 1.08; font-weight: 800; letter-spacing: -0.03em; }
+.vm-sell h2 span { display: block; color: var(--peach); }
+.vm-sell ul { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 0; padding: 0; list-style: none; }
 .vm-sell li { padding: 6px 12px; border-radius: 999px; font-size: 12px; line-height: 16px; font-weight: 700; color: #fff;
   background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.35); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
-/* Dos accesos con el patrón de los tiles de Valoriza: foto arriba, título 18, texto 13 y un CTA. */
-.vm-use__opts { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; margin: 0; padding: 0; list-style: none; text-align: left; }
-.vm-use__opts li { display: grid; grid-template-rows: 132px auto; overflow: hidden; border-radius: 20px; border: 1px solid var(--line); background: #fff; box-shadow: 0 12px 28px -22px rgba(59,23,130,0.35); }
-.vm-use__opts img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 600ms var(--ease); }
-.vm-use__opts li:hover img { transform: scale(1.04); }
-.vm-use__opts li:first-child img { object-position: 50% 88%; }
-.vm-use__opts li:nth-child(2) img { object-position: 85% 12%; }
-.vm-use__opts li > div { display: grid; justify-items: start; gap: 6px; padding: 16px 20px 20px; }
-.vm-use__opts h3 { margin: 0; font-size: 18px; line-height: 22px; font-weight: 800; letter-spacing: -0.02em; color: var(--v700); }
-.vm-use__opts p { margin: 0; font-size: 13px; line-height: 19px; color: var(--muted); }
-.vm-use__opts .pvbtn { height: 40px; margin-top: 8px; padding: 0 28px; font-size: 14px; }
-.vm-use__opts .pprofilebtn { margin-top: 8px; padding: 0; }
+/* Dos accesos con la misma anatomía clara: texto a la izquierda, foto de campaña a la derecha fundida con el lavanda. */
+.vm-use__opts { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-auto-rows: 168px; gap: 14px; margin: 0; padding: 0; list-style: none; text-align: left; }
+.vm-use__opts li { position: relative; isolation: isolate; overflow: hidden; border: 1px solid #DDCFF7; border-radius: 18px; background: linear-gradient(120deg, #FFFFFF 0%, var(--lav) 60%, #EFE7FF 100%);
+  box-shadow: 0 12px 20px -18px rgba(59,23,130,0.45); transition: border-color 200ms var(--ease), box-shadow 200ms var(--ease), transform 200ms var(--ease); }
+.vm-use__opts li > div { display: grid; align-content: center; justify-items: start; gap: 12px; height: 100%; padding: 20px 24px; color: var(--muted); font-size: 14px; line-height: 20px; }
+.vm-use__opts span { display: grid; gap: 4px; max-width: 48%; }
+.vm-use__opts strong { font-size: 18px; line-height: 23px; font-weight: 800; letter-spacing: -0.02em; color: var(--v700); }
+/* Botones de Concorde a escala de tarjeta (misma pieza, alto y aire compactos). */
+.vm-use__opts .pvbtn, .vm-use__opts .psec { height: 40px; padding: 0 28px; font-size: 14px; }
+.vm-use__opts img { position: absolute; z-index: -1; top: 0; right: 0; width: 56%; height: 100%; object-fit: cover; display: block;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 34%); mask-image: linear-gradient(90deg, transparent 0%, #000 34%); }
+.vm-use__opts li:first-child img { object-position: 50% 40%; }
+/* La escena del carro ya viene en blanco a la izquierda: se ancla a la derecha sin máscara. */
+.vm-use__opts li:nth-child(2) img { width: 100%; object-position: 100% 30%; -webkit-mask-image: none; mask-image: none; }
 
 /* Franja del canal: composición y medidas del banner de próximas ofertas de Valoriza. */
 .vm-whatsapp { position: relative; isolation: isolate; justify-self: stretch; width: 100%; height: 120px; overflow: hidden; border-radius: 16px;
@@ -451,9 +449,12 @@ const VM_CSS = `
   .vm-center .pvbtn { width: 100%; }
   .vm-sell { min-height: 420px; align-items: end; padding: 20px; }
   .vm-sell::before { background: linear-gradient(0deg, rgba(46,15,112,0.96) 0%, rgba(59,23,130,0.8) 45%, transparent 75%); }
-  .vm-sell h3 { font-size: 22px; line-height: 26px; }
-  .vm-use__opts { grid-template-columns: minmax(0, 1fr); gap: 10px; }
-  .vm-sell ul { left: 20px; right: 20px; bottom: 16px; }
+  .vm-sell figcaption { max-width: none; }
+  .vm-sell h2 { font-size: 24px; }
+  .vm-use__opts { grid-template-columns: minmax(0, 1fr); grid-auto-rows: 150px; gap: 10px; }
+  .vm-use__opts li > div { padding: 16px; }
+  .vm-use__opts span { max-width: 54%; }
+  .vm-use__opts strong { font-size: 16px; line-height: 21px; }
   .vm-whatsapp { width: min(100%, 388px); height: auto; aspect-ratio: 388 / 120; }
   .vm-whatsapp__glow--left { left: -18%; top: -67%; width: 41%; height: auto; aspect-ratio: 1; filter: blur(35px); }
   .vm-whatsapp__glow--right { display: none; }
