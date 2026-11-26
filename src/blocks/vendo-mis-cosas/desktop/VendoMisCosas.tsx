@@ -382,11 +382,11 @@ const VM_CSS = `
 .vm-whatsapp__cta:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
 /* La escena se funde con el degradado: anclada a la derecha, a todo el alto, con máscara hacia la izquierda. */
 /* Ícono de vidrio en el hueco entre el CTA y la escena: sombra con desplazamiento y flotación lenta. */
-.vm-whatsapp__icon { position: absolute; z-index: 2; top: 50%; left: 57%; width: 112px; height: auto; transform: translateY(-50%) rotate(-8deg);
+.vm-whatsapp__icon { position: absolute; z-index: 2; top: 50%; left: 57%; width: 112px; height: auto; transform: translateY(-50%) rotate(8deg) scaleX(-1);
   filter: drop-shadow(0 14px 18px rgba(20,0,60,0.45)); pointer-events: none; }
 @media (prefers-reduced-motion: no-preference) {
   .vm-whatsapp__icon { animation: vm-float 5.5s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate; }
-  @keyframes vm-float { to { transform: translateY(calc(-50% - 8px)) rotate(-4deg); } }
+  @keyframes vm-float { to { transform: translateY(calc(-50% - 8px)) rotate(4deg) scaleX(-1); } }
 }
 .vm-whatsapp > img:not(.vm-whatsapp__icon) { position: absolute; z-index: 1; top: 0; right: 0; height: 100%; width: auto; aspect-ratio: 800 / 418; object-fit: cover;
   -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 28%); mask-image: linear-gradient(90deg, transparent 0%, #000 28%); }
