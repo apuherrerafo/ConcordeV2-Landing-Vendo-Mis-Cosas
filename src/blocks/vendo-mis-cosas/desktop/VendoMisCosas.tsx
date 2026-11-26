@@ -52,7 +52,7 @@ const EXPECT: { icon: Sec; title: string; text: string }[] = [
 // (recorrido propio: Valorizar → Publicar).
 const USES = [
   { img: `${IMG}/publica.jpg`, href: PUBLICAR, title: "¿Tienes algo que ya no usas?", text: "Publícalo en VMC y recibe propuestas." },
-  { img: `${IMG}/vende-carro.jpg`, href: VALUAR, title: "¿O lo que buscabas era vender tu carro?", text: "Haz clic aquí: valorízalo y publícalo en VMC." },
+  { img: `${IMG}/vende-carro.jpg`, href: VALUAR, title: "¿O lo que buscabas era vender tu carro?", text: "Valorízalo y publícalo en VMC." },
 ];
 
 // Lo que se ve en el banner gráfico (departamentos del prototipo v4, taxonomía demostrativa).
@@ -384,6 +384,14 @@ const VM_CSS = `
 .vm-use__opts li:nth-child(2) strong { color: #fff; }
 .vm-use__opts li:nth-child(2) span { max-width: 50%; }
 .vm-use__opts li:nth-child(2) svg { color: var(--peach); }
+/* Las dos tarjetas con foto de campaña a sangre: la de artículos en claro (camino principal), la del carro en oscuro.
+   La flecha sale en ambas: la tarjeta entera es el enlace y en la del carro tapaba el ícono. */
+.vm-use__opts li:first-child { background: linear-gradient(120deg, #FFFFFF 0%, var(--lav) 55%, #E8DDFF 100%); }
+.vm-use__opts li:first-child a { grid-template-columns: minmax(0, 1fr); }
+.vm-use__opts li:first-child img { position: absolute; z-index: -1; top: 0; right: 0; width: 52%; height: 100%; border-radius: 0; object-fit: cover; object-position: 50% 40%;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 38%); mask-image: linear-gradient(90deg, transparent 0%, #000 38%); }
+.vm-use__opts li:first-child span { max-width: 50%; }
+.vm-use__opts a > svg { display: none; }
 
 /* Franja del canal: composición y medidas del banner de próximas ofertas de Valoriza. */
 .vm-whatsapp { position: relative; isolation: isolate; justify-self: stretch; width: 100%; height: 120px; overflow: hidden; border-radius: 16px;
