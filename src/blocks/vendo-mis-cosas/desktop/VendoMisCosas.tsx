@@ -348,15 +348,16 @@ const VM_CSS = `
 .vm-sell li { padding: 6px 12px; border-radius: 999px; font-size: 12px; line-height: 16px; font-weight: 700; color: #fff;
   background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.35); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
 /* Dos accesos con la misma anatomía clara: texto a la izquierda, foto de campaña a la derecha fundida con el lavanda. */
-.vm-use__opts { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); grid-auto-rows: 176px; gap: 12px; margin: 0; padding: 0; list-style: none; text-align: left; }
+.vm-use__opts { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); grid-auto-rows: 184px; gap: 12px; margin: 0; padding: 0; list-style: none; text-align: left; }
 .vm-use__opts li { position: relative; isolation: isolate; overflow: hidden; border: 1px solid #DDCFF7; border-radius: 18px; background: linear-gradient(120deg, #FFFFFF 0%, var(--lav) 60%, #EFE7FF 100%);
   box-shadow: 0 12px 20px -18px rgba(59,23,130,0.45); transition: border-color 200ms var(--ease), box-shadow 200ms var(--ease), transform 200ms var(--ease); }
-.vm-use__opts li > div { display: grid; align-content: center; justify-items: start; gap: 12px; height: 100%; padding: 20px 24px; color: var(--muted); font-size: 14px; line-height: 20px; }
-.vm-use__opts span { display: grid; gap: 4px; max-width: 52%; }
-.vm-use__opts .pvbtn, .vm-use__opts .psec { margin-top: 10px; }
+/* Retícula común a las dos tarjetas: título en caja de 2 líneas alineado abajo, subtítulo a la misma altura, botón al pie. */
+.vm-use__opts li > div { display: grid; grid-template-rows: auto 1fr; justify-items: start; height: 100%; padding: 22px 24px; color: var(--muted); font-size: 14px; line-height: 20px; }
+.vm-use__opts span { display: grid; grid-template-rows: 46px auto; row-gap: 6px; max-width: 52%; }
+.vm-use__opts .pvbtn, .vm-use__opts .psec { align-self: end; margin: 0; }
 .vm-use__opts li:nth-child(2) span { max-width: 54%; }
 .vm-center .vm-use__opts .pvbtn { width: auto; }
-.vm-use__opts strong { font-size: 18px; line-height: 23px; font-weight: 800; letter-spacing: -0.02em; color: var(--v700); }
+.vm-use__opts strong { align-self: end; font-size: 18px; line-height: 23px; font-weight: 800; letter-spacing: -0.02em; color: var(--v700); }
 /* Botones de Concorde a escala de tarjeta (misma pieza, alto y aire compactos). */
 .vm-use__opts .pvbtn, .vm-use__opts .psec { height: 40px; padding: 0 28px; font-size: 14px; }
 .vm-use__opts img { position: absolute; z-index: -1; top: 0; right: 0; width: 56%; height: 100%; object-fit: cover; display: block;
